@@ -1,0 +1,8 @@
+# 最小依賴（求職/作品集版本）
+# 目標：能跑 `start_game_plain.py` 做基本對戰、以及使用 baseline*.so
+#
+# 若你要跑神經網路/RL（agents/RLplayer.py, train_nn.py, reinforcement.py），
+# 請改用 requirement.txt（或自行安裝 torch/tqdm 等額外依賴）。
+
+numpy==1.23.5
+

@@ -13,13 +13,13 @@ def parse_args():
         description="Train supervised policy network (5 actions).")
     parser.add_argument(
         "--data",
-        default="train/poker_data_with_baseline_final.npz",
-        help="Path to training npz (default: train/poker_data_with_baseline_final.npz)",
+        default="data/poker_data_with_baseline_final.npz",
+        help="Path to training npz (default: data/poker_data_with_baseline_final.npz)",
     )
     parser.add_argument(
         "--out",
-        default="policy_nn.pt",
-        help="Output path for model weights (default: policy_nn.pt)",
+        default="models/policy_nn.pt",
+        help="Output path for model weights (default: models/policy_nn.pt)",
     )
     return parser.parse_args()
 

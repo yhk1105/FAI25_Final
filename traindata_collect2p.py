@@ -139,6 +139,9 @@ if __name__ == "__main__":
     # 整理結果
     all_states = [x[0] for x in result_list]
     all_actions = [x[1] for x in result_list]
-    np.savez(f"poker_data_with_baseline.npz", states=np.array(
-        all_states), actions=np.array(all_actions))
-    print("Data collection done.")
+    # 輸出到 data/（避免把大型產出物放在 repo 根目錄）
+    import os
+    os.makedirs("data", exist_ok=True)
+    out_path = os.path.join("data", "poker_data_with_baseline.npz")
+    np.savez(out_path, states=np.array(all_states), actions=np.array(all_actions))
+    print(f"Data collection done. Saved to {out_path}")

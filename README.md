@@ -2,7 +2,7 @@
 
 本專案在**兩人德州撲克（Heads-up Texas Hold’em）**環境中，實作多種 AI 玩家並與課程提供的 `baseline1~baseline7` 對戰比較。重點不是做 UI，而是把「**狀態表示 → 決策策略/模型 → 對戰評估**」完整串起來。
 
-更完整的動機、方法推導與實驗結果整理在 `report.pdf`。
+更完整的動機、方法推導與實驗結果整理在 `docs/report.pdf`。
 
 ---
 
@@ -26,8 +26,8 @@
   - `agents/neural_player.py`：127 維特徵（手牌/公共牌 one-hot + 正規化數值 + street）
   - `agents/Encoder.py`：135 維特徵（額外加入 call/min/max raise、effective stack、對手上一動作、是否 BB 等）
 - **訓練與產出物**：
-  - 監督式 policy 權重：`agents/policy_nn.pt`
-  - RL/DQN 訓練 checkpoint：`agents/dqn_poker_best.pt`、`agents/nn_poker_best_*.pt`
+  - 監督式 policy 權重：`models/policy_nn.pt`
+  - RL/DQN 訓練 checkpoint：`models/dqn_poker_best.pt`（其餘訓練中 checkpoint 會輸出到 `results/rl/`）
 
 ---
 
@@ -43,7 +43,7 @@
   - `agents/rule_base.py`：規則式玩家
   - `agents/montecarlo.py`：Monte Carlo win-rate 玩家
   - `agents/neural_player.py`：監督式 NN 玩家（fold/call/raise）
-  - `agents/RLplayer.py`：RL 玩家（載入 `agents/policy_nn.pt`，輸出 5 actions：fold/call/raise_min/raise_mid/raise_max）
+  - `agents/RLplayer.py`：RL 玩家（載入 `models/policy_nn.pt`，輸出 5 actions：fold/call/raise_min/raise_mid/raise_max）
 - **資料產生 / 訓練**
   - `traindata_collect2p.py`：**自動化蒐集監督式資料**（多進程跑對局、hook agent 決策，輸出 `.npz`）
   - `train_nn.py`：監督式 policy（5 actions）訓練（讀 `.npz`）
@@ -58,8 +58,10 @@
 ### 安裝依賴
 
 ```bash
-pip install -r requirement.txt
+pip install -r requirements-min.txt
 ```
+
+> 若要跑神經網路/RL 訓練（`train_nn.py`、`reinforcement.py`、`agents/RLplayer.py`），改用 `requirement.txt`。
 
 ### 跑一場對戰
 
@@ -75,7 +77,7 @@ python start_game_2.py
 
 ---
 
-## 我是怎麼「自動化生資料」的（重點）
+## 怎麼自動化生資料
 
 這份專案主要有兩種資料來源：
 
@@ -94,13 +96,13 @@ python start_game_2.py
   - `states`: shape = `(N, 135)`
   - `actions`: shape = `(N,)`，整數 0~4
 
-你可以用下面指令產生一份 dataset（預設輸出在專案根目錄）：
+你可以用下面指令產生一份 dataset（預設輸出到 `data/`）：
 
 ```bash
 python traindata_collect2p.py
 ```
 
-> 你 repo 裡 `train/` 的大型 `.npz`，就是用這類流程反覆收集後再整理/合併出來的（合併細節可在 `analysis.ipynb` 看到）。
+> 為了讓 repo 適合放在 GitHub（求職/作品集），本專案**不附**大型訓練資料（GB 等級）。你可以用上面的腳本自行產生，或在 `notebooks/analysis.ipynb` 看到你當時合併/整理資料的流程。
 
 ### (B) 強化學習資料：`reinforcement.py`
 
@@ -108,15 +110,8 @@ python traindata_collect2p.py
 
 ---
 
-## 資料與檔案說明（哪些是原始碼 / 哪些是產出物）
-
-- `train/*.npz`：訓練資料非常大，本 repo 預設以 `.gitignore` 排除，避免 GitHub 爆炸。
-- `result_*.json`、`*_history.*`、`*.png`：多為實驗輸出/可重生產物，建議視需求保留在本機或整理到 `results/`。
-
----
-
 ## 參考
 
-- 報告與細節：`report.pdf`
+- 報告與細節：`docs/report.pdf`
 
 

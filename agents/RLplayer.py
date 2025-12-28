@@ -63,15 +63,20 @@ class DQNAgent:
 class RLAgent(BasePokerPlayer):
     """
     供 `start_game_2.py`/`start_game_plain.py` 使用的 RL player。
-    會載入 `agents/policy_nn.pt`（監督式 policy）作為行為網路權重。
+    預設會載入 `models/policy_nn.pt`（監督式 policy）作為行為網路權重。
     """
 
     def __init__(self, model_path: str | None = None):
         super().__init__()
         self.dqn = DQNAgent(input_dim=135, output_dim=5)
 
-        default_path = pathlib.Path(__file__).resolve().parent / "policy_nn.pt"
-        self.model_path = str(default_path) if model_path is None else model_path
+        repo_root = pathlib.Path(__file__).resolve().parent.parent
+        default_path = repo_root / "models" / "policy_nn.pt"
+        legacy_path = pathlib.Path(__file__).resolve().parent / "policy_nn.pt"
+        if model_path is None:
+            self.model_path = str(default_path if default_path.exists() else legacy_path)
+        else:
+            self.model_path = model_path
 
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         state_dict = torch.load(self.model_path, map_location=device)

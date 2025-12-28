@@ -54,7 +54,8 @@ class DQNAgent():
         for transition in episode:
             self.buffer.append(transition)
         self.train()
-        self.save("agents/dqn_poker_best.pt")
+        # 避免把模型權重丟在根目錄/agents，統一收在 models/
+        self.save("models/dqn_poker_best.pt")
 
     def select_action(self, state):
         if random.random() < self.epsilon:
@@ -308,14 +309,15 @@ def RLtrain_parallel(
         # 可加 win rate 評估...
         if batch_idx % 500 == 0:
             print(dqn_agent.epsilon)
-            dqn_agent.save(f"agents/nn_poker_best_{batch_idx}.pt")
+            # 訓練過程 checkpoint 放到 results/，避免污染 repo 根目錄
+            dqn_agent.save(f"results/rl/nn_poker_best_{batch_idx}.pt")
             print(f"completed {batch_idx} batches.")
-    dqn_agent.save(f"agents/nn_poker_best_final.pt")
-    np.savetxt(f"loss_history.txt", np.array(dqn_agent.loss_history))
+    dqn_agent.save(f"results/rl/nn_poker_best_final.pt")
+    np.savetxt(f"results/rl/loss_history.txt", np.array(dqn_agent.loss_history))
 
 
 if __name__ == "__main__":
     import multiprocessing
     multiprocessing.set_start_method("spawn", force=True)
     RLtrain_parallel(total_episodes=10000, episodes_per_process=1,
-                     n_processes=10, checkpoint_path="agents/policy_nn.pt")
+                     n_processes=10, checkpoint_path="models/policy_nn.pt")
