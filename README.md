@@ -101,9 +101,6 @@ python start_game_2.py
 ```bash
 python traindata_collect2p.py
 ```
-
-> 為了讓 repo 適合放在 GitHub（求職/作品集），本專案**不附**大型訓練資料（GB 等級）。你可以用上面的腳本自行產生，或在 `notebooks/analysis.ipynb` 看到你當時合併/整理資料的流程。
-
 ### (B) 強化學習資料：`reinforcement.py`
 
 `reinforcement.py` 會用多進程同時跑多場對局，在每場對局中由 RL player 紀錄 transition（`episode_memory`），最後把 experience 丟回主進程的 replay buffer，進行 DQN 更新並定期存 checkpoint。
