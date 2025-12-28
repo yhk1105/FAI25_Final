@@ -69,6 +69,20 @@ pip install -r requirements-min.txt
 python start_game_plain.py
 ```
 
+### 跟我訓練出的最佳 Policy（NN）對戰
+
+> 這個入口會載入 `models/policy_nn.pt`，所以需要 `requirement.txt`（含 torch）。
+
+```bash
+python start_game_vs_policy.py --opponent baseline7
+```
+
+若你想自己玩（人類）對上 policy：
+
+```bash
+python start_game_vs_policy.py --opponent human --verbose 1
+```
+
 ### 批次評測 baseline（輸出結果 JSON）
 
 ```bash
@@ -106,6 +120,15 @@ python traindata_collect2p.py
 `reinforcement.py` 會用多進程同時跑多場對局，在每場對局中由 RL player 紀錄 transition（`episode_memory`），最後把 experience 丟回主進程的 replay buffer，進行 DQN 更新並定期存 checkpoint。
 
 ---
+
+## 資料夾說明（面試官快速導覽）
+
+- **`agents/`**：你實作的玩家（Rule / Monte Carlo / NN / RLplayer）
+- **`models/`**：你訓練出來、用來展示與對戰的「小型權重檔」（會放在 repo）
+- **`data/`**：本地生成的資料集（例如 `*.npz`，預設不追蹤，避免 GB 大檔）
+- **`results/`**：訓練/實驗輸出（checkpoint、loss、結果 JSON，預設不追蹤）
+- **`docs/`**：報告與題目 PDF
+- **`notebooks/`**：資料整理/分析用 notebook
 
 ## 參考
 
